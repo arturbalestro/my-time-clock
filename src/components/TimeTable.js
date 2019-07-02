@@ -10,16 +10,6 @@ class TimeTable extends React.Component {
     let timeHeader = punchTimes.map((time, index) => {
       moment.locale('pt-br');
 
-      const outTime = moment(punchTimes[1]);
-      const inTime = moment(punchTimes[0]); //moment('2019-07-01 09:05:07');
-      const diff = outTime.diff(inTime);
-      const duration = moment.duration(outTime.diff(inTime));
-
-      console.log(
-        '####getting times',
-        Math.floor(duration.asHours()) + moment.utc(diff).format(':mm:ss')
-      );
-
       const shifts = [
         {
           timeIn: moment('2019-07-01 09:05:07'),
@@ -32,25 +22,13 @@ class TimeTable extends React.Component {
       ];
       const durations = [];
 
-      shifts.map((time, index) => {
-        if (shifts.length > 1 && shifts[index - 1] !== undefined) {
-          const currentDiff = shifts[index].timeOut.diff(
-            shifts[index - 1].timeIn
-          );
-          const currentDuration = moment.duration(currentDiff);
-          const currentPeriod =
+      shifts.map((shift, index) => {
+        const currentDiff = shift.timeOut.diff(shift.timeIn);
+        const currentDuration = moment.duration(currentDiff);
+        const currentPeriod =
             Math.floor(currentDuration.asHours()) +
             moment.utc(currentDiff).format(':mm:ss');
-          console.log('####current diff', currentPeriod);
-          console.log(
-            '####diff between ',
-            shifts[index].timeOut,
-            'and',
-            shifts[index - 1].timeIn,
-            currentPeriod
-          );
-          durations.push(currentPeriod);
-        }
+        durations.push(currentPeriod);
 
         console.log('####durations', durations);
 
@@ -68,8 +46,6 @@ class TimeTable extends React.Component {
           .utc(totalDurations.asMilliseconds())
           .format('HH:mm:ss')}`
       );
-
-      //console.log('####hours worked', hoursWorked);
 
       if (index % 2 === 0) {
         return (
